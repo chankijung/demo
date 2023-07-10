@@ -1,5 +1,6 @@
 package com.demo.service;
 
+import com.demo.exception.impl.NoCompanyException;
 import com.demo.model.Company;
 import com.demo.model.Dividend;
 import com.demo.model.ScrapedResult;
@@ -86,5 +87,16 @@ public class CompanyService {
        return companyEntities.stream()
                .map(e->e.getName())
                .collect(Collectors.toList());
+    }
+
+    public String deleteCompany(String ticker){
+        var company = this.companyRepository.findByTicker(ticker)
+                .orElseThrow(()->new NoCompanyException());
+
+        this.dividendRepository.deleteAllByCompanyId(company.getId());
+        this.companyRepository.delete(company);
+
+        this.deleteAutocompleteKeyword(company.getName());
+        return company.getName();
     }
 }

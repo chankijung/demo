@@ -22,6 +22,8 @@ spring:
   redis:
     host: localhost
     port: 6379
+  jwt:
+    secret: asdfasdfasdf
 scheduler:
   scrap:
     yahoo: "0/5 * * * * *"
